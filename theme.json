@@ -1,0 +1,9 @@
+{
+  "theme": "default",
+  "colors": {
+    "primary": "#E50914",
+    "secondary": "#221F1F",
+    "background": "#000000",
+    "text": "#FFFFFF"
+  }
+} 
