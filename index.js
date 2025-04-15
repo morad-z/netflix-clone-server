@@ -18,9 +18,7 @@ const port = process.env.PORT || 5001;
 
 // Middleware
 app.use(cors({
-  origin: process.env.CLIENT_URL 
-    ? [process.env.CLIENT_URL, 'http://localhost:3000', 'http://localhost:3001'] 
-    : ['http://localhost:3000', 'http://localhost:3001'],
+  origin: true, // Allow all origins in production - we'll rely on Render's security
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept']
@@ -31,13 +29,14 @@ app.use(express.urlencoded({ extended: true }));
 
 // Session middleware
 app.use(session({
-  secret: 'your-secret-key',
+  secret: process.env.JWT_SECRET || 'your-secret-key',
   resave: false,
   saveUninitialized: false,
   cookie: {
     secure: process.env.NODE_ENV === 'production',
     httpOnly: true,
-    maxAge: 24 * 60 * 60 * 1000 // 24 hours
+    maxAge: 24 * 60 * 60 * 1000, // 24 hours
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
   }
 }));
 
